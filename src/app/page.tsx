@@ -144,14 +144,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">
-            Land Classification & Carbon Credit Analyzer
+      <header className="animated-gradient shadow-lg border-b-4 border-blue-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <h1 className="text-3xl font-bold text-white drop-shadow-lg">
+            🌍 Land Classification & Carbon Credit Analyzer
           </h1>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-blue-100 mt-2 font-medium">
             Analyze land cover, vegetation indices, and estimate carbon credits using satellite data
           </p>
         </div>
@@ -160,37 +160,37 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Controls */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <div className="bg-slate-800 rounded-2xl shadow-xl p-6 mb-6 border-2 border-blue-500/30">
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Start Date
+              <label className="block text-sm font-semibold text-blue-200 mb-2">
+                📅 Start Date
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border-2 border-blue-400/30 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-700 text-white"
               />
             </div>
             <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                End Date
+              <label className="block text-sm font-semibold text-blue-200 mb-2">
+                📅 End Date
               </label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border-2 border-blue-400/30 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-700 text-white"
               />
             </div>
             <div className="flex gap-2">
               <button
                 onClick={() => polygon && analyzePolygon(polygon)}
                 disabled={!polygon || loading}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
               >
-                {loading ? 'Analyzing...' : 'Analyze'}
+                {loading ? '🔄 Analyzing...' : '🚀 Analyze'}
               </button>
             </div>
           </div>
@@ -198,43 +198,47 @@ export default function Home() {
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="bg-red-900/20 border-2 border-red-500/50 rounded-2xl p-5 mb-6 shadow-lg">
             <div className="flex items-center">
-              <svg className="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-6 h-6 text-red-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
-              <p className="text-red-800">{error}</p>
+              <p className="text-red-200 font-semibold">{error}</p>
             </div>
           </div>
         )}
 
         {/* Map and Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* Map */}
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <h2 className="text-lg font-semibold mb-4">Interactive Map</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Map - Takes 2 columns (66% width) */}
+          <div className="lg:col-span-2 bg-slate-800 rounded-2xl shadow-xl p-6 border-2 border-blue-500/30 hover:border-blue-500/50 transition-all">
+            <h2 className="text-xl font-bold mb-4 text-blue-100 flex items-center gap-2">
+              🗺️ Interactive Map
+            </h2>
             <MapComponent 
               onPolygonCreated={handlePolygonCreated}
               onPolygonUpdated={handlePolygonCreated}
             />
           </div>
 
-          {/* Quick Stats */}
+          {/* Quick Stats - Takes 1 column (33% width) */}
           <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-lg font-semibold mb-4">Quick Stats</h2>
+            <div className="bg-slate-800 rounded-2xl shadow-xl p-6 border-2 border-blue-500/30">
+              <h2 className="text-xl font-bold mb-4 text-blue-100 flex items-center gap-2">
+                📊 Quick Stats
+              </h2>
               {polygon ? (
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Polygon Status</span>
-                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                      Active
+                  <div className="flex justify-between items-center bg-slate-700 rounded-xl p-3 border border-blue-400/30">
+                    <span className="text-blue-200 font-medium">Polygon Status</span>
+                    <span className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-sm font-bold shadow-md">
+                      ✓ Active
                     </span>
                   </div>
                   {classificationData?.areaStatistics && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Total Area</span>
-                      <span className="font-semibold">
+                    <div className="flex justify-between items-center bg-slate-700 rounded-xl p-3 border border-blue-400/30">
+                      <span className="text-blue-200 font-medium">Total Area</span>
+                      <span className="font-bold text-white text-lg">
                         {classificationData.areaStatistics
                           .reduce((sum: number, item: any) => sum + item.areaHectares, 0)
                           .toFixed(2)}{' '}
@@ -243,12 +247,12 @@ export default function Home() {
                     </div>
                   )}
                   {carbonData?.credits && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Credit Eligibility</span>
-                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    <div className="flex justify-between items-center bg-slate-700 rounded-xl p-3 border border-blue-400/30">
+                      <span className="text-blue-200 font-medium">Credit Eligibility</span>
+                      <span className={`px-4 py-2 rounded-full text-sm font-bold shadow-md ${
                         carbonData.credits.eligibility === 'Potentially Eligible'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
+                          : 'bg-gradient-to-r from-orange-500 to-red-500 text-white'
                       }`}>
                         {carbonData.credits.eligibility}
                       </span>
@@ -256,32 +260,34 @@ export default function Home() {
                   )}
                 </div>
               ) : (
-                <p className="text-gray-500 text-center py-4">
-                  Draw a polygon on the map to see statistics
+                <p className="text-blue-300 text-center py-8 font-medium">
+                  🎯 Draw a polygon on the map to see statistics
                 </p>
               )}
             </div>
 
             {/* Export Options */}
             {(satelliteData || classificationData || carbonData) && (
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-semibold mb-4">Export Data</h2>
-                <div className="space-y-2">
+              <div className="bg-slate-800 rounded-2xl shadow-xl p-6 border-2 border-blue-500/30">
+                <h2 className="text-xl font-bold mb-4 text-blue-100 flex items-center gap-2">
+                  💾 Export Data
+                </h2>
+                <div className="space-y-3">
                   <button
                     onClick={handleExportCSV}
-                    className="w-full px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors text-sm font-medium"
+                    className="w-full px-5 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-xl transition-all text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
                   >
                     📊 Export as CSV
                   </button>
                   <button
                     onClick={handleExportPDF}
-                    className="w-full px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors text-sm font-medium"
+                    className="w-full px-5 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl transition-all text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
                   >
                     📄 Export as PDF Report
                   </button>
                   <button
                     onClick={handleExportGeoJSON}
-                    className="w-full px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors text-sm font-medium"
+                    className="w-full px-5 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl transition-all text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
                   >
                     🗺️ Export as GeoJSON
                   </button>
@@ -301,10 +307,10 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-12">
+      <footer className="bg-slate-800 border-t-4 border-blue-500 mt-12 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-sm text-gray-600">
-            Powered by Google Earth Engine, Sentinel-2, and ESA WorldCover
+          <p className="text-center text-sm text-blue-200 font-medium">
+            🛰️ Powered by Google Earth Engine, Sentinel-2, and ESA WorldCover
           </p>
         </div>
       </footer>

@@ -56,28 +56,51 @@ export async function POST(request: NextRequest) {
       // Use Dynamic World AI-based classifier (Deep Learning)
       console.log('🤖 Using AI-based Dynamic World classifier');
       
-      // Get recent images from last 6 months for better coverage
-      const recentStartDate = new Date(endDate);
-      recentStartDate.setMonth(recentStartDate.getMonth() - 3);
-      const recentStartStr = recentStartDate.toISOString().split('T')[0];
+      // Progressive fallback: Try to get data, extending time range if needed
+      let monthsToTry = 1;
+      let maxMonths = 12; // Maximum 1 year back
+      let dynamicWorld;
+      let recentStartStr;
+      let actualMonthsUsed = 0;
       
-      console.log(`📅 Fetching current classification from ${recentStartStr} to ${endDate}`);
-      const dynamicWorld = await getDynamicWorldLandCover(geometry, recentStartStr, endDate);
+      while (monthsToTry <= maxMonths) {
+        const recentStartDate = new Date(endDate);
+        recentStartDate.setMonth(recentStartDate.getMonth() - monthsToTry);
+        recentStartStr = recentStartDate.toISOString().split('T')[0];
+        
+        console.log(`📅 Attempting to fetch data from ${recentStartStr} to ${endDate} (${monthsToTry} month${monthsToTry > 1 ? 's' : ''})`);
+        
+        dynamicWorld = await getDynamicWorldLandCover(geometry, recentStartStr, endDate);
+        
+        // Try to get the mode and calculate stats
+        const testImage = dynamicWorld.select('label').mode().rename('classification');
+        const testStats = await calculateAreaStatistics(testImage, geometry);
+        
+        if (testStats && testStats.groups && testStats.groups.length > 0) {
+          console.log(`✅ Found data with ${monthsToTry} month${monthsToTry > 1 ? 's' : ''} of history`);
+          actualMonthsUsed = monthsToTry;
+          landcoverImage = testImage;
+          break;
+        } else {
+          console.log(`⚠️ No data found for ${monthsToTry} month${monthsToTry > 1 ? 's' : ''}, trying longer period...`);
+          monthsToTry++;
+        }
+      }
       
-      // Get the most likely land cover class for CURRENT state (mode of recent images)
-      // Rename the band to 'classification' so calculateAreaStatistics can find it
-      landcoverImage = dynamicWorld.select('label').mode().rename('classification');
+      if (!landcoverImage) {
+        throw new Error('No Dynamic World data available for this region in the past year. Try a different location or date range.');
+      }
       
       classificationData = {
         source: 'Dynamic World AI Classifier',
         model: 'Deep Learning CNN (Convolutional Neural Network)',
         description: 'AI-powered near real-time land classification using neural networks trained on millions of Sentinel-2 images',
         classificationDate: endDate,
-        temporalWindow: '3 months',
+        temporalWindow: `${actualMonthsUsed} month${actualMonthsUsed > 1 ? 's' : ''}`,
         dateRange: { startDate: recentStartStr, endDate },
         features: [
           'Current/Present land classification',
-          'Recent 3-month temporal analysis',
+          `Recent ${actualMonthsUsed}-month temporal analysis`,
           'Pixel-level confidence scores',
           'Global coverage at 10m resolution'
         ],
